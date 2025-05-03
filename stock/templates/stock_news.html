@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .news-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .news-card {
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: inherit;
+        }
+        .news-card img {
+            width: 100%;
+            height: auto;
+        }
+        .news-card-content {
+            padding: 15px;
+        }
+        .news-title {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .news-meta {
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Latest News</h1>
+    <div class="news-container">
+        {% for news in news_items %}
+            <a href="{{ news.link }}" target="_blank" class="news-card">
+                {% if news.thumbnail.resolutions %}
+                    <img src="{{ news.thumbnail.resolutions.0.url }}" alt="Thumbnail">
+                {% endif %}
+                <div class="news-card-content">
+                    <div class="news-title">{{ news.title }}</div>
+                    <div class="news-meta">
+                        {{ news.publisher }} |
+                        {{ news.providerPublishTime|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<h2>{{ company.longName }} ({{ company.symbol }})</h2>
+<p><strong>Sector:</strong> {{ company.sector }}</p>
+<p><strong>Industry:</strong> {{ company.industry }}</p>
+<p><strong>Current Price:</strong> ₹{{ company.currentPrice }}</p>
+<p><strong>Market Cap:</strong> ₹{{ company.marketCap|floatformat:0 }}</p>
+<p><strong>Dividend Yield:</strong> {{ company.dividendYield }}%</p>
+<p><strong>EPS (TTM):</strong> {{ company.epsTrailingTwelveMonths }}</p>
+<p><strong>PE Ratio:</strong> {{ company.trailingPE }}</p>
+<p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+
+<h3>Executive Team</h3>
+<ul>
+  {% for officer in company.companyOfficers %}
+    <li>
+      <strong>{{ officer.name }}</strong> — {{ officer.title }}
+      {% if officer.totalPay %} | Pay: ₹{{ officer.totalPay|floatformat:0 }}{% endif %}
+    </li>
+  {% empty %}
+    <li>No officers listed.</li>
+  {% endfor %}
+</ul>
+
+<h3>Business Summary</h3>
+<p>{{ company.longBusinessSummary }}</p>

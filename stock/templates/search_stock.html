@@ -1,0 +1,26 @@
+<h2>Stock Listings</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Sector</th>
+            <th>Industry</th>
+            <th>Exchange</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.symbol }}</td>
+                <td>{{ stock.longname|default:stock.shortname }}</td>
+                <td>{{ stock.typeDisp }}</td>
+                <td>{{ stock.sector|default:"—" }}</td>
+                <td>{{ stock.industry|default:"—" }}</td>
+                <td>{{ stock.exchDisp }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
