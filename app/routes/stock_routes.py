@@ -1,7 +1,7 @@
 from flask import jsonify , Blueprint
 
 from app.services.stock_service import(
-    stockinfo, stockdividend , stockfinancials ,stocknews
+    stockinfo, stockdividend , stockfinancials ,stocknews , stocksearch
 )
 
 stockblueprint  =Blueprint('stock',__name__)
@@ -21,3 +21,7 @@ def getstockfinancials(symbol):
 @stockblueprint.route('/stock/<symbol>/news/' , methods = ['GET'])
 def getstocknews(symbol):
     return jsonify(stocknews(symbol))
+
+@stockblueprint.route('/stock/search/<query>' , methods = ['GET'])
+def getstocksearch(query):
+    return jsonify(stocksearch(query))

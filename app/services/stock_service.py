@@ -32,3 +32,10 @@ def stocknews(symbol):
         return news
     except Exception as e:
         return {'Error': str(e)}
+    
+def stocksearch(query):
+    try:
+        results = yf.Search(query , max_results=10).quotes
+        return results
+    except Exception as e:
+        return {'Error': str(e)}
