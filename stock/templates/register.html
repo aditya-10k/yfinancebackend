@@ -1,6 +1,164 @@
-<h2>Register</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - StockVerse</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1651340981821-b519ad14da7c?q=80&w=2940&auto=format&fit=crop') no-repeat center center / cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 0;
+    }
+
+    .register-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3rem 2rem;
+      border-radius: 24px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      color: white;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .register-card h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      outline: none;
+    }
+
+    .form-group input::placeholder {
+      color: #ccc;
+    }
+
+    .register-btn {
+      background: white;
+      color: black;
+      padding: 0.75rem;
+      border-radius: 9999px;
+      border: none;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .register-btn:hover {
+      background: #e2e2e2;
+      transform: scale(1.03);
+    }
+
+    .bottom-text {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .bottom-text a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    ul.errorlist {
+      color: #ff6b6b;
+      margin-top: -0.5rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.85rem;
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay"></div>
+
+  <div class="register-card">
+    <h2>Register</h2>
+    <form method="post">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="id_username">Username</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="id_email">Email</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="id_password1">Password</label>
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="id_password2">Confirm Password</label>
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+      </div>
+
+      <button class="register-btn" type="submit">Register</button>
+    </form>
+
+    <div class="bottom-text">
+      Already have an account? <a href="{% url 'login' %}">Login</a>
+    </div>
+  </div>
+
+</body>
+</html>
