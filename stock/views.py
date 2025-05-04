@@ -3,11 +3,13 @@ from django.contrib.auth import login, logout, authenticate
 from .forms import RegisterForm, LoginForm, StockSearchForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseServerError
-from datetime import datetime
+from datetime import datetime,timezone
 import requests
 
 def home_view(request):
     return render(request, 'home.html')
+
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -19,6 +21,8 @@ def register_view(request):
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -34,6 +38,8 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
 
 def stock_list_view(request):
     if request.method=='POST':
@@ -52,8 +58,10 @@ def stock_list_view(request):
         form=StockSearchForm()
     return render(request, 'search_stock.html', {'form': form})
 
-def stock_detail_view(request):
-    url = 'https://yfinancebackend.onrender.com/api/stock/IRFC.NS' 
+
+
+def stock_detail_view(request,symbol):
+    url = f'https://yfinancebackend.onrender.com/api/stock/{symbol}' 
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -62,6 +70,7 @@ def stock_detail_view(request):
         data = {}
 
     return render(request, 'stock_detail.html', {'company': data})
+
 
 
 def stock_news(request):
@@ -75,3 +84,50 @@ def stock_news(request):
             item["providerPublishTime"] = datetime.fromtimestamp(timestamp)
 
     return render(request, "stock_news.html", {"news_items": data})
+
+def stock_financials(request, symbol):
+    url = f'https://yfinancebackend.onrender.com/api/stock/{symbol}/financials'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        financials_data = response.json()
+    else:
+        financials_data = {}
+
+    years = []
+    sample_metric = next(iter(financials_data.values()), {})
+    for timestamp in sample_metric:
+        if timestamp:
+            try:
+                dt = datetime.fromtimestamp(int(timestamp) / 1000, tz=timezone.utc)
+                years.append(dt.year)
+            except Exception:
+                years.append("Invalid")
+        else:
+            years.append("N/A")
+
+    return render(request, 'stock_financials.html', {
+        'symbol':symbol,
+        'financials_data': financials_data,
+        'years': years,
+    })
+
+
+
+def stock_dividend(request, symbol):
+    url = f"https://yfinancebackend.onrender.com/api/stock/{symbol}/dividend"
+    response = requests.get(url)
+    dividend_data = {}
+
+    if response.status_code == 200:
+        raw_data = response.json()
+        dividend_data = {
+        datetime.fromtimestamp(int(ts) / 1000, tz=timezone.utc).strftime('%Y-%m-%d'): val
+        for ts, val in raw_data.items()
+        }      
+
+    context = {
+        "symbol": symbol.upper(),
+        "dividends": sorted(dividend_data.items())
+    }
+    return render(request, 'stock_dividends.html', context)

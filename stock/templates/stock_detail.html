@@ -22,3 +22,6 @@
 
 <h3>Business Summary</h3>
 <p>{{ company.longBusinessSummary }}</p>
+<br><br>
+
+<h4><a href="{% url 'stock_financials' symbol=company.symbol %}">View Financials</a> | <a href="{% url 'stock_dividends' symbol=company.symbol %}">View Dividends</a></h4>

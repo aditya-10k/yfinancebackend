@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{symbol}} Stock Financials</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        td:first-child {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{symbol}} Stock Financial Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                {% for year in years %}
+                    <th>{{ year }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for metric, values in financials_data.items %}
+                <tr>
+                    <td>{{ metric }}</td>
+                    {% for value in values.values %}
+                        <td>{{ value|default:"N/A" }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

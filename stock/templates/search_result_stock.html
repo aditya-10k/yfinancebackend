@@ -15,7 +15,7 @@
         {% for stock in stocks %}
             <tr>
                 <td>{{ stock.symbol }}</td>
-                <td>{{ stock.longname|default:stock.shortname }}</td>
+                <td><a href="{% url 'stock_detail' symbol=stock.symbol %}">{{ stock.longname|default:stock.shortname }}</a></td>
                 <td>{{ stock.typeDisp }}</td>
                 <td>{{ stock.sector|default:"—" }}</td>
                 <td>{{ stock.industry|default:"—" }}</td>
