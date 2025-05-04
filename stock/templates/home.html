@@ -1,6 +1,66 @@
-<h2>Welcome!</h2>
-{% if user.is_authenticated %}
-    <p>Hello, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
-{% else %}
-    <p>You are not logged in. <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StockVerse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800">
+
+  <!-- Hero Section -->
+  <section class="w-full px-6 py-16 bg-white">
+    <div class="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center gap-10">
+      <!-- Text content -->
+      <div class="w-full lg:w-1/2">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Welcome to StockVerse
+        </h1>
+        <p class="text-lg text-gray-600 mb-6">
+          Your ultimate destination for real-time market insights and personalized portfolio management.
+        </p>
+        <a href="{% url 'login' %}" class="inline-flex items-center px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800 transition mr-4">
+            Login
+          </a>
+          <a href="{% url 'register' %}" class="inline-flex items-center px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800 transition">
+            Signup
+          </a>              
+          </a>
+      </div>
+      <!-- Image -->
+      <div class="w-full lg:w-1/2">
+        <img src="https://images.unsplash.com/photo-1648275913341-7973ae7bc9b3?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dashboard Image" class="rounded-xl shadow-xl w-full">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold mb-4">Why Choose Us</h2>
+      <p class="text-gray-500 mb-10">Experience the difference with our cutting-edge features</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="bg-white p-6 rounded-lg border shadow-sm hover:shadow-md transition">
+          <div class="text-3xl mb-4">🔒</div>
+          <h3 class="text-lg font-semibold">Secure Platform</h3>
+          <p class="text-gray-500 text-sm mt-2">Enterprise-grade security to protect your valuable data</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="bg-white p-6 rounded-lg border shadow-sm hover:shadow-md transition">
+          <div class="text-3xl mb-4">⚡</div>
+          <h3 class="text-lg font-semibold">Lightning Fast</h3>
+          <p class="text-gray-500 text-sm mt-2">Optimized performance for seamless user experience</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="bg-white p-6 rounded-lg border shadow-sm hover:shadow-md transition">
+          <div class="text-3xl mb-4">⚙️</div>
+          <h3 class="text-lg font-semibold">Easy Integration</h3>
+          <p class="text-gray-500 text-sm mt-2">Simple setup process with existing workflows</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
