@@ -10,6 +10,8 @@ def landing_page_view(request):
     return render(request, 'landingPage.html')
 
 
+def home_page_view(request):
+    return render(request,'homePage.html')
 
 def register_view(request):
     if request.method == 'POST':
@@ -30,17 +32,19 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('/stock/search/')
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
-
+@login_required
 def stock_list_view(request):
     if request.method=='POST':
         form=StockSearchForm(request.POST)
@@ -59,7 +63,7 @@ def stock_list_view(request):
     return render(request, 'search_stock.html', {'form': form})
 
 
-
+@login_required
 def stock_detail_view(request,symbol):
     url = f'https://yfinancebackend.onrender.com/api/stock/{symbol}' 
     response = requests.get(url)
@@ -72,7 +76,7 @@ def stock_detail_view(request,symbol):
     return render(request, 'stock_detail.html', {'company': data})
 
 
-
+@login_required
 def stock_news(request):
     url='https://yfinancebackend.onrender.com/api/stock/IRFC.NS/news/'
     response = requests.get(url)
@@ -85,6 +89,8 @@ def stock_news(request):
 
     return render(request, "stock_news.html", {"news_items": data})
 
+
+@login_required
 def stock_financials(request, symbol):
     url = f'https://yfinancebackend.onrender.com/api/stock/{symbol}/financials'
     response = requests.get(url)
@@ -113,7 +119,7 @@ def stock_financials(request, symbol):
     })
 
 
-
+@login_required
 def stock_dividend(request, symbol):
     url = f"https://yfinancebackend.onrender.com/api/stock/{symbol}/dividend"
     response = requests.get(url)

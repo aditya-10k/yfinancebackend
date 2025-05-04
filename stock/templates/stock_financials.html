@@ -44,5 +44,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <br>
+    <a href="{% url 'stock_detail' symbol=symbol %}">Back to {{symbol}} Company Details</a>
 </body>
 </html>

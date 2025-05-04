@@ -24,5 +24,8 @@
         <tr><td colspan="2">No dividend data available.</td></tr>
         {% endfor %}
     </table>
+
+    <br>
+    <a href="{% url 'stock_detail' symbol=symbol %}">Back to {{symbol}} Company Details</a>
 </body>
 </html>
