@@ -65,42 +65,36 @@ import requests
 from django.shortcuts import render
 
 def search_page_view(request):
-    return render(request, 'search_stock.html')  # this renders your HTML page
+    return render(request, 'search_stock.html') 
 
 
 
-def search_view(request):
-    query = request.GET.get('q', '')
+# This renders the search page with the form
+def render_search_page(request):
+    return render(request, 'search_stock.html')
 
-    if query:
-        try:
-            url = f"https://yfinancebackend.onrender.com/api/stock/search/{query}"  # Replace with your actual API URL
-            response = requests.get(url)
-            
-            # If the API responds successfully
-            if response.status_code == 200:
-                data = response.json()
 
-                # Prepare the list of results to return
-                results = []
-                for stock in data:
-                    results.append({
-                        'symbol': stock.get('symbol'),
-                        'shortname': stock.get('shortname'),
-                        'sector': stock.get('sector'),
-                        'exchange': stock.get('exchDisp'),
-                    })
-                    print('dd ${results}')
-
-                # Return JSON response
-                return JsonResponse(results, safe=False)
-            else:
-                return JsonResponse({'error': 'Failed to fetch stock data'}, status=500)
-        except requests.exceptions.RequestException as e:
-            return JsonResponse({'error': f'Error: {str(e)}'}, status=500)
-    else:
-        form=StockSearchForm()
-    return render(request, 'search_stock.html', {'form': form})
+# This handles AJAX requests for live search
+def search_view(request, symbol):
+    try:
+        url = f"https://yfinancebackend.onrender.com/api/stock/search/{symbol}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            results = [
+                {
+                    'symbol': stock.get('symbol'),
+                    'shortname': stock.get('shortname'),
+                    'sector': stock.get('sector'),
+                    'exchange': stock.get('exchDisp'),
+                }
+                for stock in data
+            ]
+            return JsonResponse(results, safe=False)
+        else:
+            return JsonResponse({'error': 'Failed to fetch stock data'}, status=500)
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 
 
