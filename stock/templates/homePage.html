@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="left-buttons">
+            <button onclick="navigate('page1.html')">Page 1</button>
+            <button onclick="navigate('page2.html')">Page 2</button>
+            <button onclick="navigate('page3.html')">Page 3</button>
+            <button onclick="navigate('page4.html')">Page 4</button>
+        </div>
+
+        <div class="right-section">
+            <button class="profile-btn" onclick="navigate('profile.html')">Profile</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="welcome-container">
+            <div class="welcome-text">
+                <h1><strong>Welcome to StockVerse</strong></h1>
+                <h2><strong>Your ultimate destination for real-time market insights and personalized portfolio
+                        management.
+                    </strong> </h2>
+
+                <div class="main-search">
+                    <input type="text" id="search-bar" placeholder="Search stocks, news and many more..." />
+                </div>
+            </div>
+<!-- Enter the image here -->
+            <div class="welcome-image">
+                <img src="stockmarket1.jpg" />
+            </div>
+        </div>
+    </main>
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
