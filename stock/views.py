@@ -4,7 +4,18 @@ from .forms import RegisterForm, LoginForm, StockSearchForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseServerError
 from datetime import datetime,timezone
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
 import requests
+
+
+from .forms import SymbolSearchForm
+
+def search_page_view(request):
+    form = SymbolSearchForm()
+    return render(request, 'stock_search.html', {'form': form})
+
 
 def landing_page_view(request):
     return render(request, 'landingPage.html')
@@ -41,22 +52,53 @@ def logout_view(request):
 
 
 
-def stock_list_view(request):
-    if request.method=='POST':
-        form=StockSearchForm(request.POST)
-        if form.is_valid():
-            symbol=form.cleaned_data['symbol']
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.shortcuts import render
+import json
+import requests
 
-            url=f'https://yfinancebackend.onrender.com/api/stock/search/{symbol}'
-            response=requests.get(url)
+from django.shortcuts import render
+
+def search_page_view(request):
+    return render(request, 'search_stock.html')  # this renders your HTML page
+
+
+
+def search_view(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        try:
+            url = f"https://yfinancebackend.onrender.com/api/stock/search/{query}"  # Replace with your actual API URL
+            response = requests.get(url)
+            
+            # If the API responds successfully
             if response.status_code == 200:
-                stocks = response.json()
+                data = response.json()
+
+                # Prepare the list of results to return
+                results = []
+                for stock in data:
+                    results.append({
+                        'symbol': stock.get('symbol'),
+                        'shortname': stock.get('shortname'),
+                        'sector': stock.get('sector'),
+                        'exchange': stock.get('exchDisp'),
+                    })
+                    print('dd ${results}')
+
+                # Return JSON response
+                return JsonResponse(results, safe=False)
             else:
-                stocks=[]
-            return render(request, 'search_result_stock.html', {'stocks': stocks})
+                return JsonResponse({'error': 'Failed to fetch stock data'}, status=500)
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({'error': f'Error: {str(e)}'}, status=500)
     else:
-        form=StockSearchForm()
-    return render(request, 'search_stock.html', {'form': form})
+        return JsonResponse([], safe=False)
+
+
+
 
 
 

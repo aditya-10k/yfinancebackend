@@ -1,19 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+  <meta charset="UTF-8">
+  <title>Stock Search</title>
+  <style>
+    input[type="text"] {
+      width: 400px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .results {
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+      width: 400px;
+      position: absolute;
+      background-color: white;
+      z-index: 10;
+    }
+
+    .result-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .result-item:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 <body>
-     <form method=POST action="{% url 'search' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Symbol:</label>
-            {{ form.symbol }}
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-  
+
+<h2>Search Stock</h2>
+<input type="text" id="stock-input" autocomplete="off" placeholder="Type stock name or symbol...">
+<div class="results" id="results-box"></div>
+
+<script>
+  const input = document.getElementById("stock-input");
+  const resultsBox = document.getElementById("results-box");
+
+  input.addEventListener("input", function () {
+    const query = this.value.trim();
+
+    if (query.length < 1) {
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    // Updated fetch URL to call the correct endpoint `/search/page`
+    fetch(`/search/page/${query}`)
+      .then(response => response.json())
+      .then(data => {
+        resultsBox.innerHTML = "";
+
+        if (data.length === 0) {
+          resultsBox.innerHTML = "<div class='result-item'>No results found</div>";
+          return;
+        }
+
+        data.forEach(stock => {
+          const div = document.createElement("div");
+          div.className = "result-item";
+          div.innerHTML = `
+            <strong>${stock.symbol}</strong> - ${stock.shortname}<br>
+            <small>${stock.exchange}, ${stock.sector}</small>
+          `;
+          div.onclick = () => {
+            input.value = stock.symbol;
+            resultsBox.innerHTML = "";
+          };
+          resultsBox.appendChild(div);
+        });
+      })
+      .catch(error => {
+        resultsBox.innerHTML = "<div class='result-item'>Error fetching data</div>";
+        console.error('Error:', error);
+      });
+  });
+</script>
+
 </body>
 </html>
