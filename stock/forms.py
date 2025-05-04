@@ -2,6 +2,11 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
+
+class SymbolSearchForm(forms.Form):
+    symbol = forms.CharField(label='Symbol', max_length=20)
+
+
 class RegisterForm(UserCreationForm):
     class Meta:
         model = User
