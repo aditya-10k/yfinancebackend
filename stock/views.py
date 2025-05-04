@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, StockSearchForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseServerError
 from datetime import datetime
@@ -36,14 +36,21 @@ def logout_view(request):
     return redirect('login')
 
 def stock_list_view(request):
-    url='https://yfinancebackend.onrender.com/api/stock/search/aap'
-    response=requests.get(url)
-    if response.status_code == 200:
-        stocks = response.json()
-    else:
-        stocks=[]
+    if request.method=='POST':
+        form=StockSearchForm(request.POST)
+        if form.is_valid():
+            symbol=form.cleaned_data['symbol']
 
-    return render(request, 'search_stock.html', {'stocks': stocks})
+            url=f'https://yfinancebackend.onrender.com/api/stock/search/{symbol}'
+            response=requests.get(url)
+            if response.status_code == 200:
+                stocks = response.json()
+            else:
+                stocks=[]
+            return render(request, 'search_result_stock.html', {'stocks': stocks})
+    else:
+        form=StockSearchForm()
+    return render(request, 'search_stock.html', {'form': form})
 
 def stock_detail_view(request):
     url = 'https://yfinancebackend.onrender.com/api/stock/IRFC.NS' 

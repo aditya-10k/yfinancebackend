@@ -9,3 +9,7 @@ class RegisterForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
     pass
+
+
+class StockSearchForm(forms.Form):
+    symbol=forms.CharField(label='Stock Symbol',max_length=10)

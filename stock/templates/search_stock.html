@@ -1,26 +1,19 @@
-<h2>Stock Listings</h2>
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Sector</th>
-            <th>Industry</th>
-            <th>Exchange</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for stock in stocks %}
-            <tr>
-                <td>{{ stock.symbol }}</td>
-                <td>{{ stock.longname|default:stock.shortname }}</td>
-                <td>{{ stock.typeDisp }}</td>
-                <td>{{ stock.sector|default:"—" }}</td>
-                <td>{{ stock.industry|default:"—" }}</td>
-                <td>{{ stock.exchDisp }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+</head>
+<body>
+     <form method=POST action="{% url 'search' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Symbol:</label>
+            {{ form.symbol }}
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  
+</body>
+</html>
