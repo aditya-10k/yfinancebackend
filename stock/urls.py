@@ -13,4 +13,6 @@ urlpatterns = [
     path('dividends/<str:symbol>/', views.stock_dividend, name='stock_dividends'),
     path('search/', views.render_search_page, name='render_search_page'),  # For initial page with search bar
     path('search/<str:symbol>/', views.search_view, name='stock_search'),
+    path('stock/stocknews/<str:symbol>/', views.stock_news, name='stock_news'),
+
 ]

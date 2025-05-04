@@ -1,27 +1,124 @@
-<h2>{{ company.longName }} ({{ company.symbol }})</h2>
-<p><strong>Sector:</strong> {{ company.sector }}</p>
-<p><strong>Industry:</strong> {{ company.industry }}</p>
-<p><strong>Current Price:</strong> ₹{{ company.currentPrice }}</p>
-<p><strong>Market Cap:</strong> ₹{{ company.marketCap|floatformat:0 }}</p>
-<p><strong>Dividend Yield:</strong> {{ company.dividendYield }}%</p>
-<p><strong>EPS (TTM):</strong> {{ company.epsTrailingTwelveMonths }}</p>
-<p><strong>PE Ratio:</strong> {{ company.trailingPE }}</p>
-<p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ company.longName }} - Overview</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap');
 
-<h3>Executive Team</h3>
-<ul>
-  {% for officer in company.companyOfficers %}
-    <li>
-      <strong>{{ officer.name }}</strong> — {{ officer.title }}
-      {% if officer.totalPay %} | Pay: ₹{{ officer.totalPay|floatformat:0 }}{% endif %}
-    </li>
-  {% empty %}
-    <li>No officers listed.</li>
-  {% endfor %}
-</ul>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<h3>Business Summary</h3>
-<p>{{ company.longBusinessSummary }}</p>
-<br><br>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f2f2f7; /* light grey, iOS-style */
+      color: #111;
+      padding: 2rem;
+    }
 
-<h4><a href="{% url 'stock_financials' symbol=company.symbol %}">View Financials</a> | <a href="{% url 'stock_dividends' symbol=company.symbol %}">View Dividends</a></h4>
+    .tab-bar {
+      display: flex;
+      justify-content: space-between;
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+    }
+
+    .tab-bar a {
+      background: #111;
+      color: #fff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .tab-bar a:hover {
+      background: #333;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .card p, .card li {
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+    }
+
+    .card h3 {
+      margin-top: 1.8rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    a {
+      color: #007aff;
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="tab-bar">
+    <a href="{% url 'stock_financials' symbol=company.symbol %}">Financials</a>
+    <a href="{% url 'stock_dividends' symbol=company.symbol %}">Dividends</a>
+    <a href="{% url 'stock_news' symbol=company.symbol %}">News</a>
+
+  </div>
+
+  <div class="card">
+    <h2>{{ company.longName }} ({{ company.symbol }})</h2>
+    <p><strong>Sector:</strong> {{ company.sector }}</p>
+    <p><strong>Industry:</strong> {{ company.industry }}</p>
+    <p><strong>Current Price:</strong> ₹{{ company.currentPrice }}</p>
+    <p><strong>Market Cap:</strong> ₹{{ company.marketCap|floatformat:0 }}</p>
+    <p><strong>Dividend Yield:</strong> {{ company.dividendYield }}%</p>
+    <p><strong>EPS (TTM):</strong> {{ company.epsTrailingTwelveMonths }}</p>
+    <p><strong>PE Ratio:</strong> {{ company.trailingPE }}</p>
+    <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+
+    <h3>Executive Team</h3>
+    <ul>
+      {% for officer in company.companyOfficers %}
+        <li>
+          <strong>{{ officer.name }}</strong> — {{ officer.title }}
+          {% if officer.totalPay %} | Pay: ₹{{ officer.totalPay|floatformat:0 }}{% endif %}
+        </li>
+      {% empty %}
+        <li>No officers listed.</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Business Summary</h3>
+    <p>{{ company.longBusinessSummary }}</p>
+  </div>
+
+</body>
+</html>
