@@ -6,8 +6,8 @@ from django.http import HttpResponseServerError
 from datetime import datetime,timezone
 import requests
 
-def home_view(request):
-    return render(request, 'home.html')
+def landing_page_view(request):
+    return render(request, 'landingPage.html')
 
 
 
