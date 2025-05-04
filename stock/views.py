@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from .forms import RegisterForm, LoginForm, StockSearchForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseServerError
+from django.http import HttpResponseServerError,Http404,JsonResponse
 from datetime import datetime,timezone
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -21,7 +21,7 @@ def landing_page_view(request):
     return render(request, 'landingPage.html')
 
 
-def home_page_view(request):
+#def home_page_view(request):
     return render(request,'homePage.html')
 
 def register_view(request):
@@ -55,26 +55,20 @@ def logout_view(request):
     return redirect('login')
 
 
-
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.shortcuts import render
-import json
-import requests
-
-from django.shortcuts import render
-
+@login_required
 def search_page_view(request):
     return render(request, 'search_stock.html') 
 
 
 
 # This renders the search page with the form
+@login_required
 def render_search_page(request):
     return render(request, 'search_stock.html')
 
 
 # This handles AJAX requests for live search
+@login_required
 def search_view(request, symbol):
     try:
         url = f"https://yfinancebackend.onrender.com/api/stock/search/{symbol}"
@@ -97,20 +91,25 @@ def search_view(request, symbol):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-
-def stock_detail_view(request,symbol):
+@login_required
+def stock_detail_view(request, symbol):
     url = f'https://yfinancebackend.onrender.com/api/stock/{symbol}' 
-    response = requests.get(url)
-
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
         data = response.json()
-    else:
-        data = {}
 
-    return render(request, 'stock_detail.html', {'company': data})
+        if not data.get("symbol"):
+            raise ValueError("Invalid response data")
+
+        return render(request, 'stock_detail.html', {'company': data})
+
+    except (requests.RequestException, ValueError):
+        raise Http404("Stock data not found or failed to load.")
 
 
 
+@login_required
 def stock_news(request, symbol):
     url=f'https://yfinancebackend.onrender.com/api/stock/{symbol}/news/'
     response = requests.get(url)

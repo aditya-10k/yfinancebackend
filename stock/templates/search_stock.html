@@ -53,7 +53,7 @@
                         data.forEach(item => {
                             const li = document.createElement('li');
                             li.textContent = `${item.symbol} - ${item.shortname}`;
-                            li.onclick = () => window.location.href = `/stock/detail/${item.symbol}`;
+                            li.onclick = () => window.location.href = `/stock/stockdet/${item.symbol}`;
                             suggestionsList.appendChild(li);
                         });
                     }
