@@ -1,28 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ symbol }} Dividend History</title>
-    <style>
-        table { border-collapse: collapse; width: 50%; margin: 2rem auto; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>{{ symbol }} - Dividend History</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f2f2f7;
+      color: #111;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    th {
+      background-color: #f9f9f9;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fdfdfd;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
-    <h1 style="text-align:center;">{{ symbol }} - Dividend History</h1>
+
+  <div class="container">
+    <h1>{{ symbol }} - Dividend History</h1>
+
     <table>
+      <tr>
+        <th>Date</th>
+        <th>Dividend</th>
+      </tr>
+      {% for date, value in dividends %}
         <tr>
-            <th>Date</th>
-            <th>Dividend</th>
+          <td>{{ date }}</td>
+          <td>{{ value }}</td>
         </tr>
-        {% for date, value in dividends %}
-        <tr>
-            <td>{{ date }}</td>
-            <td>{{ value }}</td>
-        </tr>
-        {% empty %}
+      {% empty %}
         <tr><td colspan="2">No dividend data available.</td></tr>
-        {% endfor %}
+      {% endfor %}
     </table>
+  </div>
+
 </body>
 </html>

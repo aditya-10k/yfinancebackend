@@ -12,4 +12,6 @@ urlpatterns = [
     path('financials/<str:symbol>/', views.stock_financials, name='stock_financials'),
     path('dividends/<str:symbol>/', views.stock_dividend, name='stock_dividends'),
     path('search/', views.search_page_view, name='search_page'),  # This renders the HTML page
+    path('stock/stocknews/<str:symbol>/', views.stock_news, name='stock_news'),
+
 ]

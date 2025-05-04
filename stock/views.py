@@ -115,8 +115,8 @@ def stock_detail_view(request,symbol):
 
 
 
-def stock_news(request):
-    url='https://yfinancebackend.onrender.com/api/stock/IRFC.NS/news/'
+def stock_news(request, symbol):
+    url=f'https://yfinancebackend.onrender.com/api/stock/{symbol}/news/'
     response = requests.get(url)
     data = response.json()
     
