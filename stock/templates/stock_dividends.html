@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{{ symbol }} - Dividend History</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap');
@@ -14,18 +15,35 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f2f2f7;
-      color: #111;
+      background: url('https://plus.unsplash.com/premium_photo-1661963212517-830bbb7d76fc?q=80&w=2886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
       padding: 2rem;
+      position: relative;
+      color: #fff;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      z-index: 0;
     }
 
     .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
       max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
       padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(15px);
     }
 
     h1 {
@@ -39,30 +57,47 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
+      color: #fff;
     }
 
     th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.8rem 1rem;
       text-align: center;
       font-size: 1rem;
     }
 
     th {
-      background-color: #f9f9f9;
+      background-color: rgba(255, 255, 255, 0.1);
       font-weight: 600;
     }
 
     tr:nth-child(even) {
-      background-color: #fdfdfd;
+      background-color: rgba(255, 255, 255, 0.05);
     }
 
     tr:hover {
-      background-color: #f2f2f2;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      th, td {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="overlay"></div>
 
   <div class="container">
     <h1>{{ symbol }} - Dividend History</h1>
@@ -82,6 +117,5 @@
       {% endfor %}
     </table>
   </div>
-
 </body>
 </html>

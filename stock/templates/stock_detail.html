@@ -15,27 +15,52 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #f2f2f7; /* light grey, iOS-style */
-      color: #111;
+      background: url('https://plus.unsplash.com/premium_photo-1661963212517-830bbb7d76fc?q=80&w=2886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
       padding: 2rem;
+      position: relative;
+      color: #fff;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 800px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(15px);
     }
 
     .tab-bar {
       display: flex;
-      justify-content: space-between;
-      background: #ffffffcc;
+      justify-content: space-around;
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
       padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      position: sticky;
-      top: 1rem;
-      z-index: 100;
+      border-radius: 999px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .tab-bar a {
-      background: #111;
-      color: #fff;
+      background: #fff;
+      color: #000;
       padding: 0.5rem 1.2rem;
       border-radius: 999px;
       text-decoration: none;
@@ -45,32 +70,33 @@
     }
 
     .tab-bar a:hover {
-      background: #333;
+      background: #ddd;
     }
 
-    .card {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      margin-top: 1.5rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .card h2 {
+    h2 {
       font-size: 1.8rem;
-      margin-bottom: 1rem;
       font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
     }
 
-    .card p, .card li {
+    .info p, .info li {
       margin-bottom: 0.8rem;
       font-size: 1rem;
+      line-height: 1.6;
     }
 
-    .card h3 {
+    .info strong {
+      color: #ddd;
+    }
+
+    h3 {
       margin-top: 1.8rem;
       font-size: 1.4rem;
       font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     ul {
@@ -78,47 +104,62 @@
     }
 
     a {
-      color: #007aff;
+      color: #4da6ff;
       text-decoration: underline;
     }
 
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      .tab-bar {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="overlay"></div>
 
-  <div class="tab-bar">
-    <a href="{% url 'stock_financials' symbol=company.symbol %}">Financials</a>
-    <a href="{% url 'stock_dividends' symbol=company.symbol %}">Dividends</a>
-    <a href="{% url 'stock_news' symbol=company.symbol %}">News</a>
+  <div class="container">
+    <div class="tab-bar">
+      <a href="{% url 'stock_financials' symbol=company.symbol %}">Financials</a>
+      <a href="{% url 'stock_dividends' symbol=company.symbol %}">Dividends</a>
+      <a href="{% url 'stock_news' symbol=company.symbol %}">News</a>
+    </div>
 
+    <div class="info">
+      <h2>{{ company.longName }} ({{ company.symbol }})</h2>
+      <p><strong>Sector:</strong> {{ company.sector }}</p>
+      <p><strong>Industry:</strong> {{ company.industry }}</p>
+      <p><strong>Current Price:</strong> ₹{{ company.currentPrice }}</p>
+      <p><strong>Market Cap:</strong> ₹{{ company.marketCap|floatformat:0 }}</p>
+      <p><strong>Dividend Yield:</strong> {{ company.dividendYield }}%</p>
+      <p><strong>EPS (TTM):</strong> {{ company.epsTrailingTwelveMonths }}</p>
+      <p><strong>PE Ratio:</strong> {{ company.trailingPE }}</p>
+      <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+
+      <h3>Executive Team</h3>
+      <ul>
+        {% for officer in company.companyOfficers %}
+          <li>
+            <strong>{{ officer.name }}</strong> — {{ officer.title }}
+            {% if officer.totalPay %} | Pay: ₹{{ officer.totalPay|floatformat:0 }}{% endif %}
+          </li>
+        {% empty %}
+          <li>No officers listed.</li>
+        {% endfor %}
+      </ul>
+
+      <h3>Business Summary</h3>
+      <p>{{ company.longBusinessSummary }}</p>
+    </div>
   </div>
-
-  <div class="card">
-    <h2>{{ company.longName }} ({{ company.symbol }})</h2>
-    <p><strong>Sector:</strong> {{ company.sector }}</p>
-    <p><strong>Industry:</strong> {{ company.industry }}</p>
-    <p><strong>Current Price:</strong> ₹{{ company.currentPrice }}</p>
-    <p><strong>Market Cap:</strong> ₹{{ company.marketCap|floatformat:0 }}</p>
-    <p><strong>Dividend Yield:</strong> {{ company.dividendYield }}%</p>
-    <p><strong>EPS (TTM):</strong> {{ company.epsTrailingTwelveMonths }}</p>
-    <p><strong>PE Ratio:</strong> {{ company.trailingPE }}</p>
-    <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
-
-    <h3>Executive Team</h3>
-    <ul>
-      {% for officer in company.companyOfficers %}
-        <li>
-          <strong>{{ officer.name }}</strong> — {{ officer.title }}
-          {% if officer.totalPay %} | Pay: ₹{{ officer.totalPay|floatformat:0 }}{% endif %}
-        </li>
-      {% empty %}
-        <li>No officers listed.</li>
-      {% endfor %}
-    </ul>
-
-    <h3>Business Summary</h3>
-    <p>{{ company.longBusinessSummary }}</p>
-  </div>
-
 </body>
 </html>
